@@ -1,0 +1,26 @@
+** stillness-mode
+
+An emacs mode that stops windows from resizing when you complete something.
+Inspired by Psionikus: https://www.youtube.com/watch?v=6aA1wfW6t0g
+
+*Installation*:
+
+with straight.el:
+
+#+begin_src emacs-lisp
+(straight-use-package '(ct :host github :repo "neeasade/stillness-mode.el" :branch "main"))
+#+end_src
+
+*Features*:
+
+- works with horizontally stacked windows
+- accounts for windows below the read height
+
+*Supported modes*:
+
+- vertico
+- ivy
+
+*Caveats*:
+
+- if you depend on the point /during/ a completing read, this breaks you (eg [[https://github.com/oantolin/embark][embark]])
