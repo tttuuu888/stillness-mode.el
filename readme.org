@@ -1,3 +1,6 @@
+
+[[https://i.imgur.com/nIUsiba.png]]
+
 ** stillness-mode
 
 An emacs mode that stops windows from resizing when you complete something.
