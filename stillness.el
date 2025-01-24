@@ -68,3 +68,6 @@
   (if stillness-mode
       (advice-add 'completing-read :around #'stillness--handle-point)
     (advice-remove 'completing-read #'stillness--handle-point)))
+
+(provide 'stillness)
+;;; stillness.el ends here
