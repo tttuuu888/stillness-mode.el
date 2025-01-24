@@ -54,12 +54,12 @@
         (->> (window-list)
           (-map (lambda (window)
                   (with-selected-window window
-                    (-let ((frame-line (+ (nth 1 (window-edges))
-                                         (count-lines (window-start) (point)))))
+                    (-let* ((window-top (nth 1 (window-edges)))
+                             (frame-line (+ window-top (count-lines (window-start) (point)))))
                       (when (> frame-line (- minibuffer-count minibuffer-offset))
                         (deactivate-mark)
                         (move-to-window-line
-                          (- minibuffer-count minibuffer-offset (nth 1 (window-edges))))))))))
+                          (- minibuffer-count minibuffer-offset window-top))))))))
 
         ;; do the thing:
         (apply read-call args)))))
