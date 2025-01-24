@@ -11,7 +11,7 @@ Inspired by Psionikus: https://www.youtube.com/watch?v=6aA1wfW6t0g
 with straight.el:
 
 #+begin_src emacs-lisp
-(straight-use-package '(ct :host github :repo "neeasade/stillness-mode.el" :branch "main"))
+(straight-use-package '(stillness-mode :host github :repo "neeasade/stillness-mode.el" :branch "main"))
 #+end_src
 
 *Features*:
@@ -27,3 +27,4 @@ with straight.el:
 *Caveats*:
 
 - if you depend on the point /during/ a completing read, this breaks you (eg [[https://github.com/oantolin/embark][embark]])
+
