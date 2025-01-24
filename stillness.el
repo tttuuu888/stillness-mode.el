@@ -16,6 +16,8 @@
 ;;
 ;;; Code:
 
+(require 'dash)
+
 (defgroup stillness nil
   "Make your windows jump around less by altering the point"
   :group 'convenience)
