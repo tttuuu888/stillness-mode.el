@@ -2,8 +2,9 @@
 
 ** stillness-mode
 
-An emacs mode that stops windows from resizing when you complete something.
-Inspired by Psionikus: https://www.youtube.com/watch?v=6aA1wfW6t0g
+A global emacs minor mode that stops windows from resizing and scrolling when you complete something. Inspired by [[https://www.youtube.com/watch?v=6aA1wfW6t0g][Psionikus]].
+
+|[[https://gist.github.com/neeasade/025845dc8052ab5548f6db7a0af1cea3/raw/821a6186ccf653ce5660b539ca151d38c5a3ba84/before2.gif]]|➡|[[https://gist.github.com/neeasade/025845dc8052ab5548f6db7a0af1cea3/raw/409b60f3abe9580e05194a05ab0ffeb7810b017f/after2.gif]]|
 
 *Installation*:
 
@@ -17,7 +18,7 @@ with straight.el:
 
 - works with horizontally stacked windows
 - accounts for windows below the expected minibuffer height
-- keep your region if it would be visible
+- keep your region up if it would be visible
 
 *Customization*
 
@@ -27,4 +28,4 @@ height by setting ~stillness-minibuffer-height~
 *Caveats*:
 
 - if you depend on the point /during/ a completing read, this breaks you (eg [[https://github.com/oantolin/embark][embark]])
-
+- ~stillness-mode~ doesn't account for line-wrapping
