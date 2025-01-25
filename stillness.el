@@ -60,7 +60,7 @@
                                (minibuffer-line (- (window-total-height) minibuffer-count)))
                         (when (and (> (nth 3 (window-edges))
                                      (- (frame-height) minibuffer-count))
-                                (> current-line minibuffer-line))
+                                (> (1+ (1+ current-line)) minibuffer-line))
                           (deactivate-mark)
                           (move-to-window-line
                             (- minibuffer-line minibuffer-offset))))))))
