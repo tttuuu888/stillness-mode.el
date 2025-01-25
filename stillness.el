@@ -52,7 +52,7 @@
           (-filter (lambda (w)
                      (-let (((_ top _ _) (window-edges w)))
                        (< (- (frame-height) (1+ (1+ top))) minibuffer-count))))
-          (-map 'delete-window))
+          (-map #'delete-window))
 
         ;; move the point in any affected windows:
         (save-mark-and-excursion
