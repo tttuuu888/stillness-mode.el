@@ -41,36 +41,38 @@
 (defun stillness--handle-point (read-call &rest args)
   (let ((minibuffer-count (stillness--minibuffer-height))
          (minibuffer-offset stillness-minibuffer--point-offset))
-    (save-window-excursion
-      ;; delete any windows south of where the minibuffer will be:
-      (->> (window-list)
-        (-filter (lambda (w)
-                   (-let (((_ top _ _) (window-edges w)))
-                     (< (- (frame-height) (1+ (1+ top))) minibuffer-count))))
-        (-map 'delete-window))
-
-      ;; move the point in any affected windows:
-      (save-mark-and-excursion
+    (if (> (minibuffer-depth) 0)
+      (apply read-call args)
+      (save-window-excursion
+        ;; delete any windows south of where the minibuffer will be:
         (->> (window-list)
-          (-map (lambda (window)
-                  (with-selected-window window
-                    (-let* ((current-line (+ (nth 1 (window-edges)) (count-lines (window-start) (point))))
-                             (minibuffer-line (- (window-total-height) minibuffer-count)))
-                      (when (and (> (nth 3 (window-edges))
-                                   (- (frame-height) minibuffer-count))
-                              (> current-line minibuffer-line))
-                        (deactivate-mark)
-                        (move-to-window-line
-                          (- minibuffer-line minibuffer-offset))))))))
+          (-filter (lambda (w)
+                     (-let (((_ top _ _) (window-edges w)))
+                       (< (- (frame-height) (1+ (1+ top))) minibuffer-count))))
+          (-map 'delete-window))
 
-        ;; tell windows to preserve themselves if they have a southern neighbor
-        (-let* ((windows (--filter (window-in-direction 'below it)
-                           (window-list)))
-                 (_ (--map (window-preserve-size it nil t) windows))
-                 (result (apply read-call args)))
-          ;; and then release those preservations
-          (--map (window-preserve-size it nil nil) windows)
-          result)))))
+        ;; move the point in any affected windows:
+        (save-mark-and-excursion
+          (->> (window-list)
+            (-map (lambda (window)
+                    (with-selected-window window
+                      (-let* ((current-line (+ (nth 1 (window-edges)) (count-lines (window-start) (point))))
+                               (minibuffer-line (- (window-total-height) minibuffer-count)))
+                        (when (and (> (nth 3 (window-edges))
+                                     (- (frame-height) minibuffer-count))
+                                (> current-line minibuffer-line))
+                          (deactivate-mark)
+                          (move-to-window-line
+                            (- minibuffer-line minibuffer-offset))))))))
+
+          ;; tell windows to preserve themselves if they have a southern neighbor
+          (-let* ((windows (--filter (window-in-direction 'below it)
+                             (window-list)))
+                   (_ (--map (window-preserve-size it nil t) windows))
+                   (result (apply read-call args)))
+            ;; and then release those preservations
+            (--map (window-preserve-size it nil nil) windows)
+            result))))))
 
 (define-minor-mode stillness-mode
   "Global minor mode to prevent windows from jumping on minibuffer activation."
