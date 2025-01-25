@@ -19,7 +19,7 @@
 (require 'dash)
 
 (defgroup stillness nil
-  "Make your windows jump around less by altering the point."
+  "Make your windows jump around less by altering the point and window layout."
   :group 'stillness)
 
 (defcustom stillness-minibuffer-height nil

@@ -1,4 +1,3 @@
-
 [[https://i.imgur.com/nIUsiba.png]]
 
 ** stillness-mode
@@ -17,12 +16,13 @@ with straight.el:
 *Features*:
 
 - works with horizontally stacked windows
-- accounts for windows below the read height
+- accounts for windows below the expected minibuffer height
+- keep your region if it would be visible
 
-*Supported modes*:
+*Customization*
 
-- vertico
-- ivy
+~stillness-mode~ should /just work/, but you can tell it the expected minibuffer
+height by setting ~stillness-minibuffer-height~
 
 *Caveats*:
 
