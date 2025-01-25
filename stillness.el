@@ -83,8 +83,8 @@
   :global t
   (if stillness-mode
     (progn
-      (advice-add 'completing-read :around #'stillness--handle-point)
-      (advice-add 'completing-read-multiple :around #'stillness--handle-point))
+      (advice-add 'completing-read :around #'stillness--handle-point '(depth 90))
+      (advice-add 'completing-read-multiple :around #'stillness--handle-point '(depth 90)))
     (advice-remove 'completing-read #'stillness--handle-point)
     (advice-remove 'completing-read-multiple #'stillness--handle-point)))
 
