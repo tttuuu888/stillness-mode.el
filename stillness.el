@@ -27,6 +27,11 @@
   :type 'integer
   :group 'stillness)
 
+(defcustom stillness-minibuffer--point-offset 3
+  "The number of lines above the minibuffer the point should be."
+  :type 'integer
+  :group 'stillness)
+
 (defun stillness--minibuffer-height ()
   (or stillness-minibuffer-height
     (and (bound-and-true-p vertico-mode) vertico-count)
@@ -35,7 +40,7 @@
 
 (defun stillness--handle-point (read-call &rest args)
   (let ((minibuffer-count (stillness--minibuffer-height))
-         (minibuffer-offset 3))         ; point adjustment above minibuffer
+         (minibuffer-offset stillness-minibuffer--point-offset))
     (save-window-excursion
       ;; delete any windows south of where the minibuffer will be:
       (->> (window-list)
