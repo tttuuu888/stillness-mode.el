@@ -19,30 +19,32 @@
 (require 'dash)
 
 (defgroup stillness nil
-  "Make your windows jump around less by altering the point"
-  :group 'convenience)
+  "Make your windows jump around less by altering the point."
+  :group 'stillness)
 
 (defcustom stillness-minibuffer-height nil
   "Expected height (in lines) of the minibuffer. If set to nil, will infer from supported modes."
   :type 'integer
   :group 'stillness)
 
-(defcustom stillness-minibuffer--point-offset 3
+(defcustom stillness--minibuffer-point-offset 3
   "The number of lines above the minibuffer the point should be."
   :type 'integer
   :group 'stillness)
 
 (defun stillness--minibuffer-height ()
+  "Return the expected minibuffer height."
   (or stillness-minibuffer-height
     (and (bound-and-true-p vertico-mode) vertico-count)
     (and (bound-and-true-p ivy-mode) ivy-height)
     10))
 
-(defun stillness--handle-point (read-call &rest args)
+(defun stillness--handle-point (read-fn &rest args)
+  "Move the point and windows for a still READ-FN invocation with ARGS."
   (let ((minibuffer-count (stillness--minibuffer-height))
-         (minibuffer-offset stillness-minibuffer--point-offset))
+         (minibuffer-offset stillness--minibuffer-point-offset))
     (if (> (minibuffer-depth) 0)
-      (apply read-call args)
+      (apply read-fn args)
       (save-window-excursion
         ;; delete any windows south of where the minibuffer will be:
         (->> (window-list)
@@ -69,13 +71,15 @@
           (-let* ((windows (--filter (window-in-direction 'below it)
                              (window-list)))
                    (_ (--map (window-preserve-size it nil t) windows))
-                   (result (apply read-call args)))
+                   (result (apply read-fn args)))
             ;; and then release those preservations
             (--map (window-preserve-size it nil nil) windows)
             result))))))
 
+;;;###autoload
 (define-minor-mode stillness-mode
   "Global minor mode to prevent windows from jumping on minibuffer activation."
+  :require 'stillness
   :global t
   (if stillness-mode
     (progn
