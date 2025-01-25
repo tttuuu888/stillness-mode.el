@@ -64,6 +64,8 @@ If set to nil, will infer from supported modes."
               (with-selected-window window
                 (-let* (((_ _ _ bottom) (window-edges))
                          (distance-from-bottom (- bottom (count-screen-lines (window-start) (point))))
+                         (local-height-ratio (/ (float (frame-char-height)) (line-pixel-height)))
+                         (distance-from-bottom (floor (* local-height-ratio distance-from-bottom)))
                          (col (current-column)))
                   (when (> minibuffer-count (- distance-from-bottom 2))
                     (deactivate-mark)
