@@ -35,7 +35,7 @@
 
 (defun stillness--handle-point (read-call &rest args)
   (let ((minibuffer-count (stillness--minibuffer-height))
-         (minibuffer-offset 4))         ; point adjustment above minibuffer
+         (minibuffer-offset 3))         ; point adjustment above minibuffer
     (save-window-excursion
       ;; delete any windows south of where the minibuffer will be:
       (->> (window-list)
@@ -49,12 +49,12 @@
         (->> (window-list)
           (-map (lambda (window)
                   (with-selected-window window
-                    (-let* ((window-top (nth 1 (window-edges)))
-                             (frame-line (+ window-top (count-lines (window-start) (point)))))
-                      (when (> frame-line (- minibuffer-count minibuffer-offset))
+                    (-let* ((current-line (+ (nth 1 (window-edges)) (count-lines (window-start) (point))))
+                             (minibuffer-line (- (window-total-height) minibuffer-count)))
+                      (when (> current-line minibuffer-line)
                         (deactivate-mark)
                         (move-to-window-line
-                          (- minibuffer-count minibuffer-offset window-top))))))))
+                          (- minibuffer-line minibuffer-offset))))))))
 
         ;; tell windows to preserve themselves if they have a southern neighbor
         (-let* ((windows (--filter (windmove-find-other-window 'down nil
