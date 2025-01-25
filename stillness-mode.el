@@ -62,14 +62,17 @@ If set to nil, will infer from supported modes."
           (-each (--remove (window-in-direction 'below it) (window-list))
             (lambda (window)
               (with-selected-window window
-                (-let* (((_ _ _ bottom) (window-edges))
-                         (distance-from-bottom (- bottom (count-screen-lines (window-start) (point))))
+                (-let* (((_ top _ bottom) (window-edges))
                          (local-height-ratio (/ (float (frame-char-height)) (line-pixel-height)))
+                         (bottom (floor (* bottom local-height-ratio)))
+                         (distance-from-bottom (- bottom top (count-screen-lines (window-start) (point))))
                          (distance-from-bottom (floor (* local-height-ratio distance-from-bottom)))
                          (col (current-column)))
                   (when (> minibuffer-count (- distance-from-bottom 2))
                     (deactivate-mark)
-                    (forward-line (- (- (- minibuffer-count distance-from-bottom)) minibuffer-offset))
+                    (forward-line
+                      (- (floor (* local-height-ratio (- distance-from-bottom minibuffer-count)))
+                        (floor (* local-height-ratio minibuffer-offset))))
                     (move-to-column col))))))
 
           ;; tell windows to preserve themselves if they have a southern neighbor
