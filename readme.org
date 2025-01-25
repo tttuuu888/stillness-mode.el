@@ -1,5 +1,3 @@
-[[https://i.imgur.com/nIUsiba.png]]
-
 ** stillness-mode
 
 A global emacs minor mode that stops windows from resizing and scrolling when you complete something. Inspired by [[https://www.youtube.com/watch?v=6aA1wfW6t0g][Psionikus]].
