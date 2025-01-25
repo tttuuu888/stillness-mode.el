@@ -21,7 +21,7 @@ with straight.el:
 *Customization*
 
 ~stillness-mode~ should /just work/, but you can tell it the expected minibuffer
-height by setting ~stillness-minibuffer-height~
+height by setting ~stillness-mode-minibuffer-height~
 
 *Caveats*:
 
