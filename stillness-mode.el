@@ -59,17 +59,15 @@ If set to nil, will infer from supported modes."
 
         ;; move the point in any affected windows:
         (save-mark-and-excursion
-          (-each (window-list)
+          (-each (--remove (window-in-direction 'below it) (window-list))
             (lambda (window)
               (with-selected-window window
-                (-let* ((current-line (+ (nth 1 (window-edges)) (count-lines (window-start) (point))))
-                         (minibuffer-line (- (window-total-height) minibuffer-count))
+                (-let* (((_ _ _ bottom) (window-edges))
+                         (distance-from-bottom (- bottom (count-screen-lines (window-start) (point))))
                          (col (current-column)))
-                  (when (and (> (nth 3 (window-edges))
-                               (- (frame-height) minibuffer-count))
-                          (> (1+ (1+ current-line)) minibuffer-line))
+                  (when (> minibuffer-count (- distance-from-bottom 2))
                     (deactivate-mark)
-                    (move-to-window-line (- minibuffer-line minibuffer-offset))
+                    (forward-line (- (- (- minibuffer-count distance-from-bottom)) minibuffer-offset))
                     (move-to-column col))))))
 
           ;; tell windows to preserve themselves if they have a southern neighbor

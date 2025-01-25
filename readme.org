@@ -26,4 +26,10 @@ height by setting ~stillness-mode-minibuffer-height~
 *Caveats*:
 
 - if you depend on the point /during/ a completing read, this breaks you (eg [[https://github.com/oantolin/embark][embark]])
-- ~stillness-mode~ doesn't account for line-wrapping
+- ~stillness-mode~ doesn't account for:
+   - line-wrapping
+   - mixed-height fonts
+
+  *See Also*:
+
+  - https://github.com/hkjels/mini-ontop.el
