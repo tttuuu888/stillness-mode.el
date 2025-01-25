@@ -43,7 +43,8 @@
   "Move the point and windows for a still READ-FN invocation with ARGS."
   (let ((minibuffer-count (stillness--minibuffer-height))
          (minibuffer-offset stillness--minibuffer-point-offset))
-    (if (> (minibuffer-depth) 0)
+    (if (or (> (minibuffer-depth) 0)
+          (> minibuffer-count (frame-height))) ; pebkac: should we message if this is the case?
       (apply read-fn args)
       (save-window-excursion
         ;; delete any windows south of where the minibuffer will be:
