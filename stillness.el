@@ -23,7 +23,9 @@
   :group 'stillness)
 
 (defcustom stillness-minibuffer-height nil
-  "Expected height (in lines) of the minibuffer. If set to nil, will infer from supported modes."
+  "Expected height (in lines) of the minibuffer.
+
+If set to nil, will infer from supported modes."
   :type 'integer
   :group 'stillness)
 
@@ -52,29 +54,28 @@
           (-filter (lambda (w)
                      (-let (((_ top _ _) (window-edges w)))
                        (< (- (frame-height) (1+ (1+ top))) minibuffer-count))))
-          (-map #'delete-window))
+          (mapc #'delete-window))
 
         ;; move the point in any affected windows:
         (save-mark-and-excursion
-          (->> (window-list)
-            (-map (lambda (window)
-                    (with-selected-window window
-                      (-let* ((current-line (+ (nth 1 (window-edges)) (count-lines (window-start) (point))))
-                               (minibuffer-line (- (window-total-height) minibuffer-count)))
-                        (when (and (> (nth 3 (window-edges))
-                                     (- (frame-height) minibuffer-count))
-                                (> (1+ (1+ current-line)) minibuffer-line))
-                          (deactivate-mark)
-                          (move-to-window-line
-                            (- minibuffer-line minibuffer-offset))))))))
+          (-each (window-list)
+            (lambda (window)
+              (with-selected-window window
+                (-let* ((current-line (+ (nth 1 (window-edges)) (count-lines (window-start) (point))))
+                         (minibuffer-line (- (window-total-height) minibuffer-count)))
+                  (when (and (> (nth 3 (window-edges))
+                               (- (frame-height) minibuffer-count))
+                          (> (1+ (1+ current-line)) minibuffer-line))
+                    (deactivate-mark)
+                    (move-to-window-line (- minibuffer-line minibuffer-offset)))))))
 
           ;; tell windows to preserve themselves if they have a southern neighbor
           (-let* ((windows (--filter (window-in-direction 'below it)
                              (window-list)))
-                   (_ (--map (window-preserve-size it nil t) windows))
+                   (_ (--each windows (window-preserve-size it nil t)))
                    (result (apply read-fn args)))
             ;; and then release those preservations
-            (--map (window-preserve-size it nil nil) windows)
+            (--each windows (window-preserve-size it nil nil))
             result))))))
 
 ;;;###autoload
