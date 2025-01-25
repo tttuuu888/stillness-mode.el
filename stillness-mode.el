@@ -21,19 +21,19 @@
 (defgroup stillness-mode nil
   "Make your windows jump around less by altering the point and window layout."
   :prefix "stillness-mode"
-  :group 'stillness-mode)
+  :group 'stillness)
 
 (defcustom stillness-mode-minibuffer-height nil
   "Expected height (in lines) of the minibuffer.
 
 If set to nil, will infer from supported modes."
   :type 'integer
-  :group 'stillness-mode)
+  :group 'stillness)
 
 (defcustom stillness-mode--minibuffer-point-offset 3
   "The number of lines above the minibuffer the point should be."
   :type 'integer
-  :group 'stillness-mode)
+  :group 'stillness)
 
 (defun stillness-mode--minibuffer-height ()
   "Return the expected minibuffer height."
