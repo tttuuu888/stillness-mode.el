@@ -62,12 +62,14 @@ If set to nil, will infer from supported modes."
             (lambda (window)
               (with-selected-window window
                 (-let* ((current-line (+ (nth 1 (window-edges)) (count-lines (window-start) (point))))
-                         (minibuffer-line (- (window-total-height) minibuffer-count)))
+                         (minibuffer-line (- (window-total-height) minibuffer-count))
+                         (col (current-column)))
                   (when (and (> (nth 3 (window-edges))
                                (- (frame-height) minibuffer-count))
                           (> (1+ (1+ current-line)) minibuffer-line))
                     (deactivate-mark)
-                    (move-to-window-line (- minibuffer-line minibuffer-offset)))))))
+                    (move-to-window-line (- minibuffer-line minibuffer-offset))
+                    (move-to-column col))))))
 
           ;; tell windows to preserve themselves if they have a southern neighbor
           (-let* ((windows (--filter (window-in-direction 'below it)
