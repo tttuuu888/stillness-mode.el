@@ -4,7 +4,7 @@
 
 A global emacs minor mode that stops windows from resizing and scrolling when you complete something. Inspired by [[https://www.youtube.com/watch?v=6aA1wfW6t0g][Psionikus]].
 
-|[[https://gist.github.com/neeasade/025845dc8052ab5548f6db7a0af1cea3/raw/821a6186ccf653ce5660b539ca151d38c5a3ba84/before2.gif]]|➡|[[https://gist.github.com/neeasade/025845dc8052ab5548f6db7a0af1cea3/raw/409b60f3abe9580e05194a05ab0ffeb7810b017f/after2.gif]]|
+|[[https://i.imgur.com/sqFpzWx.gif]]|➡|[[https://i.imgur.com/kJ4uVC6.gif]]|
 
 *Installation*:
 
