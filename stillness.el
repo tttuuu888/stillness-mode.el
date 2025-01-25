@@ -41,7 +41,7 @@
       (->> (window-list)
         (-filter (lambda (w)
                    (-let (((_ top _ _) (window-edges w)))
-                     (< (- (frame-height) (1+ top)) minibuffer-count))))
+                     (< (- (frame-height) (1+ (1+ top))) minibuffer-count))))
         (-map 'delete-window))
 
       ;; move the point in any affected windows:
@@ -51,14 +51,15 @@
                   (with-selected-window window
                     (-let* ((current-line (+ (nth 1 (window-edges)) (count-lines (window-start) (point))))
                              (minibuffer-line (- (window-total-height) minibuffer-count)))
-                      (when (> current-line minibuffer-line)
+                      (when (and (> (nth 3 (window-edges))
+                                   (- (frame-height) minibuffer-count))
+                              (> current-line minibuffer-line))
                         (deactivate-mark)
                         (move-to-window-line
                           (- minibuffer-line minibuffer-offset))))))))
 
         ;; tell windows to preserve themselves if they have a southern neighbor
-        (-let* ((windows (--filter (windmove-find-other-window 'down nil
-                                     (windmove-find-other-window 'down nil it))
+        (-let* ((windows (--filter (window-in-direction 'below it)
                            (window-list)))
                  (_ (--map (window-preserve-size it nil t) windows))
                  (result (apply read-call args)))
