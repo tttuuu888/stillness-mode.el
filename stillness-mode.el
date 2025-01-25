@@ -70,9 +70,9 @@ If set to nil, will infer from supported modes."
                          (col (current-column)))
                   (when (> minibuffer-count (- distance-from-bottom 2))
                     (deactivate-mark)
-                    (forward-line
-                      (- (floor (* local-height-ratio (- distance-from-bottom minibuffer-count)))
-                        (floor (* local-height-ratio minibuffer-offset))))
+                    (line-move (- (+ (floor (* local-height-ratio (- minibuffer-count distance-from-bottom)))
+                                    (floor (* local-height-ratio minibuffer-offset))))
+                      t nil nil)
                     (move-to-column col))))))
 
           ;; tell windows to preserve themselves if they have a southern neighbor
