@@ -78,8 +78,11 @@
   "Global minor mode to prevent windows from jumping on minibuffer activation."
   :global t
   (if stillness-mode
-    (advice-add 'completing-read :around #'stillness--handle-point)
-    (advice-remove 'completing-read #'stillness--handle-point)))
+    (progn
+      (advice-add 'completing-read :around #'stillness--handle-point)
+      (advice-add 'completing-read-multiple :around #'stillness--handle-point))
+    (advice-remove 'completing-read #'stillness--handle-point)
+    (advice-remove 'completing-read-multiple #'stillness--handle-point)))
 
 (provide 'stillness)
 ;;; stillness.el ends here
