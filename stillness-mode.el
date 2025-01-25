@@ -1,4 +1,4 @@
-;;; stillness.el --- Prevent windows from jumping on minibuffer activation -*- lexical-binding: t; -*-
+;;; stillness-mode.el --- Prevent windows from jumping on minibuffer activation -*- lexical-binding: t; -*-
 ;;
 ;; Author: neeasade <neeasade@users.noreply.github.com>
 ;; URL: https://github.com/neeasade/stillness-mode.el
@@ -18,33 +18,34 @@
 
 (require 'dash)
 
-(defgroup stillness nil
+(defgroup stillness-mode nil
   "Make your windows jump around less by altering the point and window layout."
-  :group 'stillness)
+  :prefix "stillness-mode"
+  :group 'stillness-mode)
 
-(defcustom stillness-minibuffer-height nil
+(defcustom stillness-mode-minibuffer-height nil
   "Expected height (in lines) of the minibuffer.
 
 If set to nil, will infer from supported modes."
   :type 'integer
-  :group 'stillness)
+  :group 'stillness-mode)
 
-(defcustom stillness--minibuffer-point-offset 3
+(defcustom stillness-mode--minibuffer-point-offset 3
   "The number of lines above the minibuffer the point should be."
   :type 'integer
-  :group 'stillness)
+  :group 'stillness-mode)
 
-(defun stillness--minibuffer-height ()
+(defun stillness-mode--minibuffer-height ()
   "Return the expected minibuffer height."
-  (or stillness-minibuffer-height
+  (or stillness-mode-minibuffer-height
     (and (bound-and-true-p vertico-mode) vertico-count)
     (and (bound-and-true-p ivy-mode) ivy-height)
     10))
 
-(defun stillness--handle-point (read-fn &rest args)
+(defun stillness-mode--handle-point (read-fn &rest args)
   "Move the point and windows for a still READ-FN invocation with ARGS."
-  (let ((minibuffer-count (stillness--minibuffer-height))
-         (minibuffer-offset stillness--minibuffer-point-offset))
+  (let ((minibuffer-count (stillness-mode--minibuffer-height))
+         (minibuffer-offset stillness-mode--minibuffer-point-offset))
     (if (or (> (minibuffer-depth) 0)
           (> minibuffer-count (frame-height))) ; pebkac: should we message if this is the case?
       (apply read-fn args)
@@ -83,14 +84,14 @@ If set to nil, will infer from supported modes."
 ;;;###autoload
 (define-minor-mode stillness-mode
   "Global minor mode to prevent windows from jumping on minibuffer activation."
-  :require 'stillness
+  :require 'stillness-mode
   :global t
   (if stillness-mode
     (progn
-      (advice-add 'completing-read :around #'stillness--handle-point '(depth 90))
-      (advice-add 'completing-read-multiple :around #'stillness--handle-point '(depth 90)))
-    (advice-remove 'completing-read #'stillness--handle-point)
-    (advice-remove 'completing-read-multiple #'stillness--handle-point)))
+      (advice-add 'completing-read :around #'stillness-mode--handle-point '(depth 90))
+      (advice-add 'completing-read-multiple :around #'stillness-mode--handle-point '(depth 90)))
+    (advice-remove 'completing-read #'stillness-mode--handle-point)
+    (advice-remove 'completing-read-multiple #'stillness-mode--handle-point)))
 
-(provide 'stillness)
-;;; stillness.el ends here
+(provide 'stillness-mode)
+;;; stillness-mode.el ends here
