@@ -68,12 +68,12 @@ If set to nil, will infer from supported modes."
                 (with-selected-window window
                   (-let* (((_ top _ bottom) (window-edges))
                            (local-height-ratio (/ (line-pixel-height) (float (frame-char-height))))
-                           (ratio (lambda (n) (floor (* n local-height-ratio))))
+                           (ratio (lambda (n) (round (* n local-height-ratio))))
                            (bottom (funcall ratio bottom))
                            (distance-from-bottom (- bottom top (funcall ratio (count-screen-lines (window-start) (point))))))
-                    (when (> minibuffer-count (- distance-from-bottom 2))
+                    (when (> (funcall ratio minibuffer-count) (- distance-from-bottom 2))
                       (deactivate-mark)
-                      (line-move (- (+ (- minibuffer-count distance-from-bottom)
+                      (line-move (- (+ (abs (- minibuffer-count distance-from-bottom))
                                       minibuffer-offset))
                         t nil nil)))))))
 
