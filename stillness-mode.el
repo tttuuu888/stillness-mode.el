@@ -33,7 +33,7 @@ If set to nil, will infer from supported modes."
   :type 'integer
   :group 'stillness)
 
-(defcustom stillness-mode--minibuffer-point-offset 3
+(defcustom stillness-mode-minibuffer-point-offset 3
   "The number of lines above the minibuffer the point should be."
   :type 'integer
   :group 'stillness)
@@ -48,7 +48,7 @@ If set to nil, will infer from supported modes."
 (defun stillness-mode--handle-point (read-fn &rest args)
   "Move the point and windows for a still READ-FN invocation with ARGS."
   (let ((minibuffer-count (stillness-mode--minibuffer-height))
-         (minibuffer-offset stillness-mode--minibuffer-point-offset))
+         (minibuffer-offset stillness-mode-minibuffer-point-offset))
     (if (or (> (minibuffer-depth) 0)
           (> minibuffer-count (frame-height))) ; pebkac: should we message if this is the case?
       (apply read-fn args)
