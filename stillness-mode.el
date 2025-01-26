@@ -41,8 +41,8 @@ If set to nil, will infer from supported modes."
 (defun stillness-mode--minibuffer-height ()
   "Return the expected minibuffer height."
   (or stillness-mode-minibuffer-height
-    (and (bound-and-true-p vertico-mode) vertico-count)
-    (and (bound-and-true-p ivy-mode) ivy-height)
+    (and (bound-and-true-p vertico-mode) (symbol-value 'vertico-count))
+    (and (bound-and-true-p ivy-mode) (symbol-value 'ivy-height))
     10))
 
 (defun stillness-mode--handle-point (read-fn &rest args)
