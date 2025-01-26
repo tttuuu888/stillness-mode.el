@@ -50,34 +50,34 @@ If set to nil, will infer from supported modes."
           (> minibuffer-count (frame-height))) ; pebkac: should we message if this is the case?
       (apply read-fn args)
       (save-window-excursion
-        ;; delete any windows south of where the minibuffer will be:
-        (->> (window-list)
-          (-filter (lambda (w)
-                     (-let (((_ top _ _) (window-edges w)))
-                       (< (- (frame-height) (1+ (1+ top))) minibuffer-count))))
-          (mapc #'delete-window))
+        (ignore-errors
+          ;; delete any windows south of where the minibuffer will be:
+          (->> (window-list)
+            (--filter (-let (((_ top _ _) (window-edges it)))
+                        (< (- (frame-height) (1+ (1+ top))) minibuffer-count)))
+            (mapc #'delete-window)))
 
-        ;; move the point in any affected windows:
         (save-mark-and-excursion
-          (-each (--remove (window-in-direction 'below it) (window-list))
-            (lambda (window)
-              (with-selected-window window
-                (-let* (((_ top _ bottom) (window-edges))
-                         (local-height-ratio (/ (float (frame-char-height)) (line-pixel-height)))
-                         (bottom (floor (* bottom local-height-ratio)))
-                         (distance-from-bottom (- bottom top (count-screen-lines (window-start) (point))))
-                         (distance-from-bottom (floor (* local-height-ratio distance-from-bottom)))
-                         (col (current-column)))
-                  (when (> minibuffer-count (- distance-from-bottom 2))
-                    (deactivate-mark)
-                    (line-move (- (+ (floor (* local-height-ratio (- minibuffer-count distance-from-bottom)))
-                                    (floor (* local-height-ratio minibuffer-offset))))
-                      t nil nil)
-                    (move-to-column col))))))
+          (ignore-errors
+            ;; move the point in any affected windows:
+            (-each (--remove (window-in-direction 'below it) (window-list))
+              (lambda (window)
+                (with-selected-window window
+                  (-let* (((_ top _ bottom) (window-edges))
+                           (local-height-ratio (/ (float (frame-char-height)) (line-pixel-height)))
+                           (bottom (floor (* bottom local-height-ratio)))
+                           (distance-from-bottom (- bottom top (count-screen-lines (window-start) (point))))
+                           (distance-from-bottom (floor (* local-height-ratio distance-from-bottom)))
+                           (col (current-column)))
+                    (when (> minibuffer-count (- distance-from-bottom 2))
+                      (deactivate-mark)
+                      (line-move (- (+ (floor (* local-height-ratio (- minibuffer-count distance-from-bottom)))
+                                      (floor (* local-height-ratio minibuffer-offset))))
+                        t nil nil)
+                      (move-to-column col)))))))
 
           ;; tell windows to preserve themselves if they have a southern neighbor
-          (-let* ((windows (--filter (window-in-direction 'below it)
-                             (window-list)))
+          (-let* ((windows (--filter (window-in-direction 'below it) (window-list)))
                    (_ (--each windows (window-preserve-size it nil t)))
                    (result (apply read-fn args)))
             ;; and then release those preservations
