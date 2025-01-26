@@ -1,10 +1,13 @@
 ;;; stillness-mode.el --- Prevent windows from jumping on minibuffer activation -*- lexical-binding: t; -*-
 ;;
-;; Author: neeasade <neeasade@users.noreply.github.com>
-;; URL: https://github.com/neeasade/stillness-mode.el
+;; Copyright (c) 2025 neeasade
+;; SPDX-License-Identifier: MIT
+;;
 ;; Version: 0.1
-;; Package-Requires: ((emacs "26.1") (dash "2.18.0"))
+;; Author: neeasade
 ;; Keywords: convenience
+;; URL: https://github.com/neeasade/stillness-mode.el
+;; Package-Requires: ((emacs "26.1") (dash "2.18.0"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
