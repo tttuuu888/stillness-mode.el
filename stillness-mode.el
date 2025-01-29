@@ -92,10 +92,8 @@ If set to nil, will infer from supported modes."
   :global t
   (if stillness-mode
     (progn
-      (advice-add 'completing-read :around #'stillness-mode--handle-point '(depth 90))
-      (advice-add 'completing-read-multiple :around #'stillness-mode--handle-point '(depth 90)))
-    (advice-remove 'completing-read #'stillness-mode--handle-point)
-    (advice-remove 'completing-read-multiple #'stillness-mode--handle-point)))
+      (advice-add 'read-from-minibuffer :around #'stillness-mode--handle-point '(depth 90)))
+    (advice-remove 'read-from-minibuffer #'stillness-mode--handle-point)))
 
 (provide 'stillness-mode)
 ;;; stillness-mode.el ends here
